@@ -27,6 +27,7 @@ import java.util.function.Supplier
 
 
 class JsonPropertiesPane(
+    private val editor: JsonPropertiesEditor,
     private val title: String,
     private val objId: String,
     data: JSONObject,
@@ -141,14 +142,17 @@ class JsonPropertiesPane(
             val actionSchema = ret.schema
 
             val newData = changeListener(
-                PropertiesEditInput(ret.data, actionSchema?.copy() ?: schemaCopy)
+                PropertiesEditInput(ret.data ?: contentHandler.data, actionSchema?.copy() ?: schemaCopy)
             )
 
             val newSchema = newData.schema ?: actionSchema
 
             if (newSchema != null) updateSchema(newSchema)
 
-            fillData(newData.data)
+            newData.data?.also { fillData(it) }
+
+            ret.postUpdateHandler?.invoke(editor, objId)
+            newData.postUpdateHandler?.invoke(editor, objId)
         }
     }
 
@@ -191,7 +195,9 @@ class JsonPropertiesPane(
 
                 newData.schema?.also { updateSchema(it) }
 
-                fillData(newData.data)
+                newData.data?.also { fillData(it) }
+
+                newData?.postUpdateHandler?.invoke(editor, objId)
             }
         }
     }

@@ -271,6 +271,21 @@ class JsonPropertiesEditor @JvmOverloads constructor(
     }
 
     /**
+     * Focuses the field matching [target].
+     * If the field is currently collapsed or does not exist, this will do nothing.
+     *
+     * Note that this will not automatically scroll to the field. Use [scrollToField] in combination
+     * with this method for that.
+     */
+    fun focusField(target: ElementField) {
+        val index = selectionModel.findIndexOfVisibleField(target)
+        if (index != -1) {
+            treeTableView.selectionModel.clearSelection()
+            treeTableView.selectionModel.select(index, treeTableView.columns[1])
+        }
+    }
+
+    /**
      * Expands the part of the element identified by [id].
      * Specifically the subtrees identified by the [pointers].
      * An empty pointer will expand the root element.
@@ -318,6 +333,7 @@ class JsonPropertiesEditor @JvmOverloads constructor(
         resolutionScope: URI?,
         callback: OnEditCallback
     ): JsonPropertiesPane = JsonPropertiesPane(
+        this,
         title,
         objId,
         data,
