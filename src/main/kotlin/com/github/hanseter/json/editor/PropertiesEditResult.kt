@@ -1,5 +1,6 @@
 package com.github.hanseter.json.editor
 
+import com.github.hanseter.json.editor.validators.JSONPointer
 import org.json.JSONObject
 
 /**
@@ -22,5 +23,19 @@ data class PropertiesEditResult @JvmOverloads constructor(
     /**
      * A callback to run on the properties editor after the result has been applied.
      */
-    val postUpdateHandler: ((editor: JsonPropertiesEditor, elementId: String) -> Unit)? = null,
-)
+    val postUpdateHandler: ((data: PostUpdateHandlerData) -> Unit)? = null,
+) {
+
+    interface PostUpdateHandlerData {
+
+        val editor: JsonPropertiesEditor
+
+        val elementId: String
+
+        fun focusField(pointer: JSONPointer) {
+            editor.focusField(ElementField(elementId, pointer))
+        }
+
+    }
+
+}

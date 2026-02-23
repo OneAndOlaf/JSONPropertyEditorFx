@@ -151,8 +151,8 @@ class JsonPropertiesPane(
 
             newData.data?.also { fillData(it) }
 
-            ret.postUpdateHandler?.invoke(editor, objId)
-            newData.postUpdateHandler?.invoke(editor, objId)
+            ret.postUpdateHandler?.invoke(PostUpdateHandlerDataImpl(editor, objId))
+            newData.postUpdateHandler?.invoke(PostUpdateHandlerDataImpl(editor, objId))
         }
     }
 
@@ -197,7 +197,7 @@ class JsonPropertiesPane(
 
                 newData.data?.also { fillData(it) }
 
-                newData?.postUpdateHandler?.invoke(editor, objId)
+                newData?.postUpdateHandler?.invoke(PostUpdateHandlerDataImpl(editor, objId))
             }
         }
     }
@@ -483,6 +483,11 @@ class JsonPropertiesPane(
             }
         }
     }
+
+    private class PostUpdateHandlerDataImpl(
+        override val editor: JsonPropertiesEditor,
+        override val elementId: String
+    ) : PropertiesEditResult.PostUpdateHandlerData
 
     companion object {
         const val ROOT_ROW_CSS_CLASS = "isRootRow"
