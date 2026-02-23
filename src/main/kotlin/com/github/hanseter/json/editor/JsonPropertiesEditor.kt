@@ -568,7 +568,7 @@ class JsonPropertiesEditor @JvmOverloads constructor(
     class ActionCell : TreeTableCell<TreeItemData, TreeItemData>() {
         private var changeListener: ((TreeItemData) -> Unit) = this::updateActionEnablement
         private var actions: ActionsContainer? = null
-        override fun updateItem(item: TreeItemData?, empty: Boolean) {
+        public override fun updateItem(item: TreeItemData?, empty: Boolean) {
             getItem()?.removeChangeListener(changeListener)
             super.updateItem(item, empty)
 
