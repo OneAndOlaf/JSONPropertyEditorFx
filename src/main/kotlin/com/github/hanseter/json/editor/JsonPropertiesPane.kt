@@ -34,7 +34,7 @@ class JsonPropertiesPane(
     private val readOnly: Boolean,
     private val resolutionScope: URI?,
     private val refProvider: Supplier<IdReferenceProposalProvider>,
-    private val actions: List<EditorAction>,
+    private val actions: () -> List<EditorAction>,
     private val validators: () -> List<Validator>,
     viewOptions: ViewOptions,
     private val controlFactory: PropertyControlFactory,

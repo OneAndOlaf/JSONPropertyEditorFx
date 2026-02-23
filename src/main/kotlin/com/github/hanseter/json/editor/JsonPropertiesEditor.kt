@@ -61,7 +61,23 @@ class JsonPropertiesEditor @JvmOverloads constructor(
             }
         }
 
-    private val actions = (actions + arrayActions).sortedByDescending { it.priority }
+    var customActions: List<EditorAction> = actions
+        set(value) {
+            field = value
+            allActions = getAllActions(value)
+
+            Platform.runLater {
+                idsToPanes.values.forEach {
+                    it.rebuildControlTree()
+                }
+            }
+        }
+
+    private var allActions = getAllActions(customActions)
+
+    private fun getAllActions(customActions: List<EditorAction>): List<EditorAction> {
+        return (customActions + arrayActions).sortedByDescending { it.priority }
+    }
 
     private val idsToPanes = mutableMapOf<String, JsonPropertiesPane>()
     private val rootItem: FilterableTreeItem<TreeItemData> =
@@ -309,7 +325,7 @@ class JsonPropertiesEditor @JvmOverloads constructor(
         readOnly,
         resolutionScope,
         { referenceProposalProvider },
-        actions,
+        { allActions },
         { validators },
         viewOptions,
         controlFactory,
